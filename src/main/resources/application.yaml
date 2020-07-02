@@ -1,0 +1,41 @@
+server:
+  port: 8023
+  servlet:
+    context-path: /
+
+spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/community?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: root
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+      idle-timeout: 30000
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: 594983498@qq.com
+    password: nqjzsehcvpuabfcg
+#    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.tassel.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    use-generated-keys: true
+
+community:
+  path:
+    domain: http://localhost:8023
