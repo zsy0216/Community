@@ -1,7 +1,9 @@
 package com.tassel.util;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -23,6 +25,9 @@ public class MailClient {
     @Resource
     private JavaMailSender mailSender;
 
+    @Autowired
+    private StringEncryptor encryptor;
+
     @Value("${spring.mail.username}")
     private String from;
 
@@ -38,5 +43,9 @@ public class MailClient {
         } catch (MessagingException e) {
             logger.error("发送邮件失败:" + e.getMessage());
         }
+    }
+
+    private String decode(String code) {
+        return encryptor.decrypt(code);
     }
 }

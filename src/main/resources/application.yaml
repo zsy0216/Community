@@ -19,8 +19,8 @@ spring:
   mail:
     host: smtp.qq.com
     port: 465
-    username: 594983498@qq.com
-    password: nqjzsehcvpuabfcg
+    username: ENC(2a34EAfYxma1BXFO4dZRCP3SdTUyz7+qyKmZ7QEKJrA=)
+    password: ENC(qaB+zE7L5VObM1hK1YtcBMT1+brMcY0w8FeBpU/PiZo=)
 #    protocol: smtps
     properties:
       mail:
@@ -28,6 +28,11 @@ spring:
           auth: true
           ssl:
             enable: true
+
+# 加密参数
+jasypt:
+  encryptor:
+    password: test
 
 # 配置sql打印日志
 logging:

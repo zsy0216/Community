@@ -63,6 +63,13 @@
             <version>2.3.2</version>
         </dependency>
 
+        <!-- 对配置文件中的敏感信息加密 -->
+        <!-- https://mvnrepository.com/artifact/com.github.ulisesbocchio/jasypt-spring-boot-starter -->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>2.1.2</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
