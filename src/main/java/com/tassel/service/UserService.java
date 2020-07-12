@@ -13,6 +13,7 @@ public interface UserService {
 
     /**
      * 根据 id 查询用户
+     *
      * @param id
      * @return
      */
@@ -20,6 +21,7 @@ public interface UserService {
 
     /**
      * 注册
+     *
      * @param user
      * @return
      */
@@ -27,9 +29,26 @@ public interface UserService {
 
     /**
      * 激活逻辑
+     *
      * @param userId
-     * @param code 激活码
+     * @param code   激活码
      * @return
      */
     Integer activation(int userId, String code);
+
+    /**
+     * 登录验证, 返回失败信息或登录凭证
+     *
+     * @param username
+     * @param password
+     * @param expiredSecond
+     * @return
+     */
+    Map<String, Object> login(String username, String password, int expiredSecond);
+
+    /**
+     * 退出登录
+     * @param ticket
+     */
+    void logout(String ticket);
 }

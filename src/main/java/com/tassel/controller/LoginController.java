@@ -4,11 +4,14 @@ import com.google.code.kaptcha.Producer;
 import com.tassel.entity.User;
 import com.tassel.service.UserService;
 import com.tassel.util.CommunityConstant;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
@@ -38,6 +42,9 @@ public class LoginController implements CommunityConstant {
     @Resource
     Producer kaptchaProducer;
 
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
     @GetMapping("/register")
     public String toRegisterPage() {
         return "site/register";
@@ -48,6 +55,13 @@ public class LoginController implements CommunityConstant {
         return "site/login";
     }
 
+    /**
+     * 注册
+     *
+     * @param model
+     * @param user
+     * @return
+     */
     @PostMapping("/register")
     public String register(Model model, User user) {
         Map<String, Object> map = userService.register(user);
@@ -63,7 +77,15 @@ public class LoginController implements CommunityConstant {
         }
     }
 
-    // http://localhost:8023/activation/101/code
+    /**
+     * 账号激活
+     * http://localhost:8023/activation/101/code
+     *
+     * @param model
+     * @param userId
+     * @param code
+     * @return
+     */
     @GetMapping("/activation/{userId}/{code}")
     public String activation(Model model, @PathVariable("userId") int userId, @PathVariable("code") String code) {
         int result = userService.activation(userId, code);
@@ -84,6 +106,12 @@ public class LoginController implements CommunityConstant {
         return "/site/operate-result";
     }
 
+    /**
+     * 获取登录验证码图片
+     *
+     * @param response
+     * @param session
+     */
     @GetMapping("/kaptcha")
     public void getKaptcha(HttpServletResponse response, HttpSession session) {
         // 生成验证码
@@ -102,5 +130,53 @@ public class LoginController implements CommunityConstant {
         } catch (IOException e) {
             logger.error("响应验证码失败" + e.getMessage());
         }
+    }
+
+    /**
+     * 登录逻辑
+     * 对于 普通参数类型，不会自动封装到 Model 对象中，所以模板引擎中无法取到，
+     * 可以使用 request 域对象取值
+     *
+     * @param username
+     * @param password
+     * @param code
+     * @param rememberMe
+     * @param model
+     * @param session
+     * @param response
+     * @return
+     */
+    @PostMapping("/login")
+    public String login(String username, String password, String code, boolean rememberMe,
+                        Model model, HttpSession session, HttpServletResponse response) {
+        // 检查验证码
+        String kaptcha = (String) session.getAttribute("kaptcha");
+        if (StringUtils.isAnyBlank(kaptcha, code) || !kaptcha.equalsIgnoreCase(code)) {
+            model.addAttribute("codeMsg", "验证码不正确!");
+            return "/site/login";
+        }
+
+        //检查账号、密码、失效时间 判断登录
+        int expiredSeconds = rememberMe ? REMEMBER_EXPIRED_SECONDS : DEFAULT_EXPIRED_SECONDS;
+        Map<String, Object> map = userService.login(username, password, expiredSeconds);
+        // 登录成功
+        if (map.containsKey("ticket")) {
+            Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
+            cookie.setPath(contextPath);
+            cookie.setMaxAge(expiredSeconds);
+            response.addCookie(cookie);
+            return "redirect:/index";
+        } else { // 登录失败
+            model.addAttribute("usernameMsg", map.get("usernameMsg"));
+            model.addAttribute("passwordMsg", map.get("passwordMsg"));
+            return "/site/login";
+        }
+    }
+
+    @GetMapping("/logout")
+    public String logout(@CookieValue("ticket") String ticket){
+        userService.logout(ticket);
+        // 默认 get 请求路径
+        return "redirect:/login";
     }
 }

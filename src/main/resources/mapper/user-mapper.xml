@@ -10,25 +10,25 @@
         `username`, `password`, `salt`, `email`, `type`, `status`, `activation_code`, `header_url`, `create_time`
     </sql>
 
-    <select id="queryUserById" resultType="User">
+    <select id="queryUserById" resultType="com.tassel.entity.User">
         select <include refid="selectFields"></include>
         from user
         where id = #{id}
     </select>
 
-    <select id="queryByName" resultType="User">
+    <select id="queryByName" resultType="com.tassel.entity.User">
         select <include refid="selectFields"></include>
         from user
         where username = #{username}
     </select>
 
-    <select id="queryByEmail" resultType="User">
+    <select id="queryByEmail" resultType="com.tassel.entity.User">
         select <include refid="selectFields"></include>
         from user
         where email = #{email}
     </select>
 
-    <insert id="insertUser" parameterType="User" keyProperty="id">
+    <insert id="insertUser" parameterType="com.tassel.entity.User" keyProperty="id">
         insert into user (<include refid="insertFields"></include>)
         values(#{username}, #{password}, #{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl}, #{createTime})
     </insert>

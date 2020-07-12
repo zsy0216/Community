@@ -29,6 +29,12 @@ spring:
           ssl:
             enable: true
 
+# 配置sql打印日志
+logging:
+  level:
+    com.tassel.mapper:
+      debug
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.tassel.entity

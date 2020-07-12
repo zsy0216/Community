@@ -7,7 +7,7 @@
         `id`, `user_id`, `title`, `content`, `type`, `status`, `create_time`, `comment_count`, `score`
     </sql>
 
-    <select id="selectDiscussPosts" resultType="DiscussPost">
+    <select id="selectDiscussPosts" resultType="com.tassel.entity.DiscussPost">
         select
         <include refid="selectFields"></include>
         from discuss_post

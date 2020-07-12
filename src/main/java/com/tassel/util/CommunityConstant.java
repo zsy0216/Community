@@ -19,4 +19,13 @@ public interface CommunityConstant {
      * 注册邮件激活失败
      */
     int ACTIVATION_FAILURE = 2;
+
+    /**
+     * 默认状态下登录凭证失效时间: 12 小时
+     */
+    int DEFAULT_EXPIRED_SECONDS = 60 * 60 * 12;
+    /**
+     * 记住状态下登录凭证失效时间: 100 天
+     */
+    int REMEMBER_EXPIRED_SECONDS = 60 * 60 * 24 * 100;
 }

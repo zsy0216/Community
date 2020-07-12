@@ -27,9 +27,9 @@ public class HomeController {
     @Resource
     UserService userService;
 
-    @GetMapping("/index")
+    @GetMapping(value = {"/", "/index"})
     public String toIndexPage(Model model, Page page) {
-        // 方法调用前，SpringMVC 会自动实例化 Model 和 Page，并将 Page 注入 Model，
+        // 方法调用前，SpringMVC 会自动实例化 Model 和 Page(实体对象)，并将 Page 注入 Model，
         // 所以，在 thymeleaf 中可以直接访问到 page 对象中的数据
         page.setRows(discussPostService.selectDiscussPostRows(0));
         page.setPath("/index");
