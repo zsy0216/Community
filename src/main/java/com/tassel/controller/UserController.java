@@ -1,5 +1,6 @@
 package com.tassel.controller;
 
+import com.tassel.annotation.LoginRequired;
 import com.tassel.entity.User;
 import com.tassel.service.UserService;
 import com.tassel.util.CommunityUtil;
@@ -47,12 +48,14 @@ public class UserController {
 	@Resource
 	HostHolder hostHolder;
 
+	@LoginRequired
 	@GetMapping("/setting")
 	public String toSettingPage() {
 		logger.info("前往用户设置页面");
 		return "/site/setting";
 	}
 
+	@LoginRequired
 	@PostMapping("/upload")
 	public String uploadHeader(MultipartFile headerImage, Model model) {
 		if (headerImage == null) {
