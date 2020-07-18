@@ -12,23 +12,32 @@ import java.util.UUID;
  */
 public class CommunityUtil {
 
-    /**
-     * 生成随机字符串
-     *
-     * @return
-     */
-    public static String generateUUID() {
-        return UUID.randomUUID().toString().replace("-", "");
-    }
+	/**
+	 * 生成随机字符串
+	 *
+	 * @return
+	 */
+	public static String generateUUID() {
+		return UUID.randomUUID().toString().replace("-", "");
+	}
 
-    /**
-     * MD5 加密
-     * 加盐值
-     */
-    public static String md5(String key) {
-        if(StringUtils.isBlank(key)){
-            return null;
-        }
-        return DigestUtils.md5DigestAsHex(key.getBytes());
-    }
+	/**
+	 * MD5 加密
+	 * 加盐值
+	 */
+	public static String md5(String key) {
+		if (StringUtils.isBlank(key)) {
+			return null;
+		}
+		return DigestUtils.md5DigestAsHex(key.getBytes());
+	}
+
+	/**
+	 * @param contextPath
+	 * @return 判断contextPath 是否为 / 防止url 多个 / 导致拼接失败
+	 */
+	public static String contextPathJudge(String contextPath) {
+		return "/".equals(contextPath) ? "" : contextPath;
+	}
+
 }

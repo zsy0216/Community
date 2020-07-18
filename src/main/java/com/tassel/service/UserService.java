@@ -61,4 +61,13 @@ public interface UserService {
 	 * @return
 	 */
 	LoginTicket findLoginTicket(String ticket);
+
+	/**
+	 * 更新（设置）用户头像地址
+	 *
+	 * @param userId
+	 * @param headerUrl
+	 * @return
+	 */
+	int updateHeader(Integer userId, String headerUrl);
 }

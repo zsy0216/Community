@@ -50,3 +50,4 @@ mybatis:
 community:
   path:
     domain: http://localhost:8023
+    upload: E:\Documents\Projects\Community\upload
