@@ -75,7 +75,7 @@
           </li>
         </ul>
         <button type="button" class="btn btn-primary btn-sm position-absolute rt-0" data-toggle="modal"
-                data-target="#publishModal">我要发布
+                data-target="#publishModal" th:if="${loginUser != null}">我要发布
         </button>
       </div>
       <!-- 弹出框 -->
