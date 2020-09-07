@@ -15,7 +15,7 @@ import java.util.List;
 public interface DiscussPostMapper {
 
     /**
-     * 查询
+     * 查询列表
      *
      * @param userId 可选值, 用户 id
      * @param offset 起始数据号
@@ -27,7 +27,7 @@ public interface DiscussPostMapper {
     /**
      * 查询行数
      *
-     * @param userId 如果参数只有一个，而且可能要动态拼接SQL，必须加 @Param 注解
+     * @param userId 如果参数只有一个，而且可能要动态拼接 SQL (<if>等)，必须加 @Param 注解
      * @return
      */
     Integer selectDiscussPostRows(@Param("userId") int userId);
