@@ -28,4 +28,13 @@ public interface CommunityConstant {
      * 记住状态下登录凭证失效时间: 100 天
      */
     int REMEMBER_EXPIRED_SECONDS = 60 * 60 * 24 * 100;
+
+    /**
+     * 评论实体类型：帖子
+     */
+    int ENTITY_TYPE_POST = 1;
+    /**
+     * 评论实体类型：评论 对评论进行评论
+     */
+    int ENTITY_TYPE_COMMENT = 2;
 }
