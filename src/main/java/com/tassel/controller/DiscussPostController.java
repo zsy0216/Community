@@ -3,12 +3,12 @@ package com.tassel.controller;
 import com.tassel.entity.DiscussPost;
 import com.tassel.entity.User;
 import com.tassel.service.DiscussPostService;
+import com.tassel.service.UserService;
 import com.tassel.util.CommunityUtil;
 import com.tassel.util.HostHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -27,6 +27,9 @@ public class DiscussPostController {
 
 	@Resource
 	HostHolder hostHolder;
+
+	@Resource
+	UserService userService;
 
 	@PostMapping("/insert")
 	@ResponseBody
@@ -49,5 +52,17 @@ public class DiscussPostController {
 
 		// 报错异常情况，后续统一处理
 		return CommunityUtil.getJSONString(0, "帖子发布成功!");
+	}
+
+	@GetMapping("/detail/{discussPostId}")
+	public String selectDiscussPostById(@PathVariable("discussPostId") Integer discussPostId, Model model) {
+		// 帖子
+		DiscussPost post = discussPostService.selectDiscussPostById(discussPostId);
+		model.addAttribute("post", post);
+		// 作者
+		User user = userService.queryUserById(post.getUserId());
+		model.addAttribute("user", user);
+		// 回复等后续补充
+		return "site/discuss-detail";
 	}
 }

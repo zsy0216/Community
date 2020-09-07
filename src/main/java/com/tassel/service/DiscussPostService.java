@@ -37,4 +37,12 @@ public interface DiscussPostService {
 	 * @return
 	 */
 	Integer insertDiscussPost(DiscussPost post);
+
+	/**
+	 * 查看帖子详情
+	 *
+	 * @param id
+	 * @return
+	 */
+	DiscussPost selectDiscussPostById(int id);
 }

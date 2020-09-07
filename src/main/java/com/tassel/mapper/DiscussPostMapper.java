@@ -40,4 +40,12 @@ public interface DiscussPostMapper {
 	 * @return
 	 */
 	Integer insertDiscussPost(DiscussPost discussPost);
+
+	/**
+	 * 查看帖子详情
+	 *
+	 * @param id
+	 * @return
+	 */
+	DiscussPost selectDiscussPostById(int id);
 }

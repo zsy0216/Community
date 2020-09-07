@@ -31,6 +31,11 @@
             and user_id = #{userId}
         </if>
     </select>
+    <select id="selectDiscussPostById" resultType="com.tassel.entity.DiscussPost">
+        select <include refid="selectFields"/>
+        from discuss_post
+        where id = #{id}
+    </select>
 
     <insert id="insertDiscussPost" parameterType="com.tassel.entity.DiscussPost">
         insert into discuss_post(<include refid="insertFields"/>)
