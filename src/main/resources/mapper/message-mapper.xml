@@ -1,0 +1,70 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tassel.mapper.MessageMapper">
+    <sql id="selectFields">
+        `id`, `from_id`, `to_id`, `conversation_id`, `content`, `status`, `create_time`
+    </sql>
+    <sql id="insertFields">
+       `from_id`, `to_id`, `conversation_id`, `content`, `status`, `create_time`
+    </sql>
+
+    <select id="selectConversations" resultType="com.tassel.entity.Message">
+        select
+        <include refid="selectFields"/>
+        from community.message
+        where id in (
+        SELECT max( id )
+        FROM community.message
+        WHERE status != 2
+        AND from_id != 1
+        AND (from_id = #{userId} or to_id = #{userId})
+        GROUP BY conversation_id
+        )
+        order by id desc
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="selectConversationCount" resultType="java.lang.Integer">
+        select count(m.maxid) from (
+            SELECT max( id ) as maxid
+            FROM community.message
+            WHERE status != 2
+            AND from_id != 1
+            AND (from_id = #{userId} or to_id = #{userId})
+            GROUP BY conversation_id
+        ) as m
+    </select>
+
+    <select id="selectLetters" resultType="com.tassel.entity.Message">
+        select
+        <include refid="selectFields"/>
+        from community.message
+        where status != 2
+        and from_id != 1
+        and conversation_id = #{conversationId}
+        order by id desc
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="selectLetterCount" resultType="java.lang.Integer">
+        select count(id)
+        from community.message
+        where status != 2
+        and from_id != 1
+        and conversation_id = #{conversationId}
+    </select>
+
+    <select id="selectLetterUnreadCount" resultType="java.lang.Integer">
+        select count(id)
+        from community.message
+        where status = 0
+        and from_id != 1
+        and to_id = #{userId}
+        <if test="conversationId != null">
+            and conversation_id = #{conversationId}
+        </if>
+    </select>
+
+</mapper>
