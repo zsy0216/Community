@@ -23,7 +23,7 @@ public class DiscussPostServiceImpl implements DiscussPostService {
 	DiscussPostMapper discussPostMapper;
 
 	@Resource
-    SensitiveFilter sensitiveFilter;
+	SensitiveFilter sensitiveFilter;
 
 	@Override
 	public List<DiscussPost> selectDiscussPosts(int userId, int offset, int limit) {
@@ -38,15 +38,15 @@ public class DiscussPostServiceImpl implements DiscussPostService {
 	@Override
 	public Integer insertDiscussPost(DiscussPost post) {
 		if (post == null) {
-            throw new IllegalArgumentException("参数不能为空!");
+			throw new IllegalArgumentException("参数不能为空!");
 		}
 
 		// 转义 HTML 标记
-        post.setTitle(HtmlUtils.htmlEscape(post.getTitle()));
+		post.setTitle(HtmlUtils.htmlEscape(post.getTitle()));
 		post.setContent(HtmlUtils.htmlEscape(post.getContent()));
-        // 过滤敏感词
-        post.setTitle(sensitiveFilter.filter(post.getTitle()));
-        post.setContent(sensitiveFilter.filter(post.getContent()));
+		// 过滤敏感词
+		post.setTitle(sensitiveFilter.filter(post.getTitle()));
+		post.setContent(sensitiveFilter.filter(post.getContent()));
 
 		return discussPostMapper.insertDiscussPost(post);
 	}
@@ -54,5 +54,10 @@ public class DiscussPostServiceImpl implements DiscussPostService {
 	@Override
 	public DiscussPost selectDiscussPostById(int id) {
 		return discussPostMapper.selectDiscussPostById(id);
+	}
+
+	@Override
+	public Integer updateCommentCount(int id, int commentCount) {
+		return discussPostMapper.updateCommentCount(id, commentCount);
 	}
 }

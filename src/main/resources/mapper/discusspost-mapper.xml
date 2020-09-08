@@ -31,8 +31,10 @@
             and user_id = #{userId}
         </if>
     </select>
+
     <select id="selectDiscussPostById" resultType="com.tassel.entity.DiscussPost">
-        select <include refid="selectFields"/>
+        select
+        <include refid="selectFields"/>
         from discuss_post
         where id = #{id}
     </select>
@@ -41,4 +43,8 @@
         insert into discuss_post(<include refid="insertFields"/>)
         values (#{userId}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})
     </insert>
+
+    <update id="updateCommentCount">
+        update community.discuss_post set comment_count = #{commentCount} where id = #{id}
+    </update>
 </mapper>

@@ -45,4 +45,13 @@ public interface DiscussPostService {
 	 * @return
 	 */
 	DiscussPost selectDiscussPostById(int id);
+
+	/**
+	 * 更新帖子评论数量
+	 *
+	 * @param id
+	 * @param commentCount
+	 * @return
+	 */
+	Integer updateCommentCount(int id, int commentCount);
 }

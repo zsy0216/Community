@@ -4,6 +4,7 @@ import com.tassel.entity.DiscussPost;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -48,4 +49,13 @@ public interface DiscussPostMapper {
 	 * @return
 	 */
 	DiscussPost selectDiscussPostById(int id);
+
+	/**
+	 * 更新帖子评论数量
+	 *
+	 * @param id
+	 * @param commentCount
+	 * @return
+	 */
+	Integer updateCommentCount(int id, int commentCount);
 }
