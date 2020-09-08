@@ -9,6 +9,7 @@ import com.tassel.util.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -69,5 +70,38 @@ public class MessageController {
 		model.addAttribute("letterUnreadCount", letterUnreadCount);
 
 		return "/site/letter";
+	}
+
+	@GetMapping("/letter/detail/{conversationId}")
+	public String getLetterDetail(@PathVariable("conversationId") String conversationId, Page page, Model model) {
+		// 分页信息
+		page.setLimit(5);
+		page.setPath("/letter/detail/" + conversationId);
+		page.setRows(messageService.selectLetterCount(conversationId));
+
+		// 私信列表
+		List<Message> letterList = messageService.selectLetters(conversationId, page.getOffset(), page.getLimit());
+		List<Map<String, Object>> letters = new ArrayList<>();
+		if (letterList != null) {
+			for (Message message : letterList) {
+				Map<String, Object> map = new HashMap<>();
+				map.put("letter", message);
+				map.put("fromUser", userService.queryUserById(message.getFromId()));
+				letters.add(map);
+			}
+		}
+		model.addAttribute("letters", letters);
+
+		// 私信目标
+		model.addAttribute("target", getLetterTarget(conversationId));
+
+		return "/site/letter-detail";
+	}
+
+	private User getLetterTarget(String conversationId) {
+		String[] ids = conversationId.split("_");
+		User user0 = userService.queryUserById(Integer.parseInt(ids[0]));
+		User user1 = userService.queryUserById(Integer.parseInt(ids[1]));
+		return hostHolder.getUser().equals(user0) ? user1 : user0;
 	}
 }
