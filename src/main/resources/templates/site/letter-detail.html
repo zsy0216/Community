@@ -4,8 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        crossorigin="anonymous">
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
   <link rel="stylesheet" th:href="@{/css/global.css}"/>
   <link rel="stylesheet" th:href="@{/css/letter.css}"/>
   <title>牛客网-私信详情</title>
@@ -90,7 +89,7 @@
               <form>
                 <div class="form-group">
                   <label for="recipient-name" class="col-form-label">发给：</label>
-                  <input type="text" class="form-control" id="recipient-name" value="落基山脉下的闲人">
+                  <input type="text" class="form-control" id="recipient-name" th:value="${target.username}">
                 </div>
                 <div class="form-group">
                   <label for="message-text" class="col-form-label">内容：</label>

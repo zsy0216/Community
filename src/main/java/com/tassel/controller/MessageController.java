@@ -4,18 +4,19 @@ import com.tassel.entity.Message;
 import com.tassel.entity.User;
 import com.tassel.service.MessageService;
 import com.tassel.service.UserService;
+import com.tassel.util.CommunityUtil;
 import com.tassel.util.HostHolder;
 import com.tassel.util.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author shuaiyin.zhang
@@ -103,5 +104,29 @@ public class MessageController {
 		User user0 = userService.queryUserById(Integer.parseInt(ids[0]));
 		User user1 = userService.queryUserById(Integer.parseInt(ids[1]));
 		return hostHolder.getUser().equals(user0) ? user1 : user0;
+	}
+
+	@PostMapping("/letter/send")
+	@ResponseBody
+	public String sentLetter(String toName, String content) {
+		User target = userService.queryUserByName(toName);
+		if (ObjectUtils.isEmpty(target)) {
+			return CommunityUtil.getJSONString(1, "目标用户不存在!");
+		}
+
+		Message message = new Message();
+		message.setFromId(hostHolder.getUser().getId());
+		message.setToId(target.getId());
+		if (message.getFromId() < message.getToId()) {
+			message.setConversationId(message.getFromId() + "_" + message.getToId());
+		} else {
+			message.setConversationId(message.getToId() + "_" + message.getFromId());
+		}
+		message.setContent(content);
+		message.setStatus(0);
+		message.setCreateTime(new Date());
+		messageService.insertMessage(message);
+
+		return CommunityUtil.getJSONString(0);
 	}
 }

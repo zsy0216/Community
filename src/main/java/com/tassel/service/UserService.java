@@ -21,6 +21,14 @@ public interface UserService {
 	User queryUserById(int id);
 
 	/**
+	 * 根据用户名查询用户
+	 *
+	 * @param name
+	 * @return
+	 */
+	User queryUserByName(String name);
+
+	/**
 	 * 注册
 	 *
 	 * @param user

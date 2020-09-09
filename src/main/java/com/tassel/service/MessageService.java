@@ -55,4 +55,20 @@ public interface MessageService {
 	 * @return
 	 */
 	Integer selectLetterUnreadCount(int userId, String conversationId);
+
+	/**
+	 * 新增消息
+	 *
+	 * @param message
+	 * @return
+	 */
+	Integer insertMessage(Message message);
+
+	/**
+	 * 读取消息
+	 *
+	 * @param ids
+	 * @return
+	 */
+	Integer readMessage(List<Integer> ids);
 }

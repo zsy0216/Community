@@ -3,7 +3,9 @@ package com.tassel.service.impl;
 import com.tassel.entity.Message;
 import com.tassel.mapper.MessageMapper;
 import com.tassel.service.MessageService;
+import com.tassel.util.SensitiveFilter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,6 +20,9 @@ public class MessageServiceImpl implements MessageService {
 
 	@Resource
 	MessageMapper messageMapper;
+
+	@Resource
+	SensitiveFilter sensitiveFilter;
 
 	@Override
 	public List<Message> selectConversations(int userId, int offset, int limit) {
@@ -42,5 +47,17 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public Integer selectLetterUnreadCount(int userId, String conversationId) {
 		return messageMapper.selectLetterUnreadCount(userId, conversationId);
+	}
+
+	@Override
+	public Integer insertMessage(Message message) {
+		message.setContent(HtmlUtils.htmlEscape(message.getContent()));
+		message.setContent(sensitiveFilter.filter(message.getContent()));
+		return messageMapper.insertMessage(message);
+	}
+
+	@Override
+	public Integer readMessage(List<Integer> ids) {
+		return messageMapper.updateStatus(ids, 1);
 	}
 }

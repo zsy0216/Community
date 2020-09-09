@@ -67,4 +67,17 @@
         </if>
     </select>
 
+    <insert id="insertMessage" parameterType="com.tassel.entity.Message" keyProperty="id">
+        insert into community.message(<include refid="insertFields"/>)
+        values(#{fromId}, #{toId}, #{conversationId}, #{content}, #{status}, #{createTime})
+    </insert>
+
+    <update id="updateStatus">
+        update community.message set status = #{status}
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
 </mapper>
