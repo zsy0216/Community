@@ -1,6 +1,4 @@
 # 牛客Java高级工程师 - 高薪求职项目课vol.4
-视频地址：链接: https://pan.baidu.com/s/1ibUMed6qMxCo9sWgVv2C0w 提取码: uc9v
-
 ---
 
 以下为个人知识点补充，不代表课程内容
