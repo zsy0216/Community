@@ -44,6 +44,7 @@ public class MessageController {
 	 */
 	@GetMapping("/letter/list")
 	public String getLetterList(Model model, Page page) {
+		Integer.valueOf("abc");
 		User user = hostHolder.getUser();
 		// 设置分页信息
 		page.setLimit(5);
