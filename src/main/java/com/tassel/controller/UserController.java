@@ -2,6 +2,7 @@ package com.tassel.controller;
 
 import com.tassel.annotation.LoginRequired;
 import com.tassel.entity.User;
+import com.tassel.service.LikeService;
 import com.tassel.service.UserService;
 import com.tassel.util.CommunityUtil;
 import com.tassel.util.HostHolder;
@@ -47,6 +48,9 @@ public class UserController {
 	UserService userService;
 	@Resource
 	HostHolder hostHolder;
+
+	@Resource
+	LikeService likeService;
 
 	@LoginRequired
 	@GetMapping("/setting")
@@ -112,5 +116,28 @@ public class UserController {
 		} catch (IOException e) {
 			logger.error("读取头像文件失败: " + e.getMessage());
 		}
+	}
+
+	/**
+	 * 个人主页
+	 *
+	 * @param userId
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/profile/{userId}")
+	public String getProfilePage(@PathVariable("userId") int userId, Model model) {
+		User user = userService.queryUserById(userId);
+		if (user == null) {
+			throw new RuntimeException("该用户不存在");
+		}
+
+		// 用户
+		model.addAttribute("user", user);
+		// 获赞数量
+		int likeCount = likeService.findUserLikeCount(userId);
+		model.addAttribute("likeCount", likeCount);
+
+		return "/site/profile";
 	}
 }
