@@ -3,11 +3,14 @@ package com.tassel.controller;
 import com.tassel.entity.DiscussPost;
 import com.tassel.entity.User;
 import com.tassel.service.DiscussPostService;
+import com.tassel.service.LikeService;
 import com.tassel.service.UserService;
+import com.tassel.util.CommunityConstant;
 import com.tassel.util.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -21,11 +24,14 @@ import java.util.Map;
  * @Description:
  */
 @Controller
-public class HomeController {
+public class HomeController implements CommunityConstant {
     @Resource
     DiscussPostService discussPostService;
     @Resource
     UserService userService;
+
+    @Resource
+    LikeService likeService;
 
     @GetMapping(value = {"/", "/index"})
     public String toIndexPage(Model model, Page page) {
@@ -42,6 +48,10 @@ public class HomeController {
                 map.put("post", post);
                 User user = userService.queryUserById(post.getUserId());
                 map.put("user", user);
+
+                long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, post.getId());
+                map.put("likeCount", likeCount);
+
                 discussPosts.add(map);
             }
         }
