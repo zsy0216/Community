@@ -28,6 +28,11 @@ spring:
           auth: true
           ssl:
             enable: true
+  # redis
+  redis:
+    database: 11
+    host: localhost
+    port: 6379
 
 # 加密参数
 jasypt:
