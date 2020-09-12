@@ -5,10 +5,7 @@ import com.tassel.entity.User;
 import com.tassel.mapper.LoginTicketMapper;
 import com.tassel.mapper.UserMapper;
 import com.tassel.service.UserService;
-import com.tassel.util.CommunityConstant;
-import com.tassel.util.CommunityUtil;
-import com.tassel.util.MailClient;
-import com.tassel.util.RedisKeyUtil;
+import com.tassel.util.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Ep流苏
@@ -46,9 +44,54 @@ public class UserServiceImpl implements UserService, CommunityConstant {
 	@Resource
 	RedisTemplate redisTemplate;
 
+	/**
+	 * 1. 优先从缓存中取值。
+	 * 2. 取不到，则初始化缓存.
+	 * 3. 数据变更时，清除缓存数据。
+	 */
+
+	/**
+	 * 1. 优先从缓存中取值。
+	 *
+	 * @param userId
+	 * @return
+	 */
+	private User getCache(int userId) {
+		String redisKey = RedisKeyUtil.getUserKey(userId);
+		return (User) redisTemplate.opsForValue().get(redisKey);
+	}
+
+	/**
+	 * 2. 取不到，则初始化缓存.
+	 *
+	 * @param userId
+	 * @return
+	 */
+	private User initCache(int userId) {
+		User user = userMapper.queryUserById(userId);
+		String redisKey = RedisKeyUtil.getUserKey(userId);
+		redisTemplate.opsForValue().set(redisKey, user, 3600, TimeUnit.SECONDS);
+		return user;
+	}
+
+	/**
+	 * 3. 数据变更时，清除缓存数据。
+	 *
+	 * @param userId
+	 */
+	private void clearCache(int userId) {
+		String redisKey = RedisKeyUtil.getUserKey(userId);
+		redisTemplate.delete(redisKey);
+	}
+
 	@Override
 	public User queryUserById(int id) {
-		return userMapper.queryUserById(id);
+		//return userMapper.queryUserById(id);
+		User user = getCache(id);
+		if (ObjectUtils.isEmpty(user)) {
+			user = initCache(id);
+		}
+		return user;
 	}
 
 	@Override
@@ -119,6 +162,7 @@ public class UserServiceImpl implements UserService, CommunityConstant {
 			return ACTIVATION_REPEAT;
 		} else if (user.getActivationCode().equals(code)) {
 			userMapper.updateStatus(1, userId);
+			clearCache(userId);
 			return ACTIVATION_SUCCESS;
 		} else {
 			return ACTIVATION_FAILURE;
@@ -192,6 +236,9 @@ public class UserServiceImpl implements UserService, CommunityConstant {
 
 	@Override
 	public int updateHeader(Integer userId, String headerUrl) {
-		return userMapper.updateHeader(headerUrl, userId);
+		//return userMapper.updateHeader(headerUrl, userId);
+		Integer rows = userMapper.updateHeader(headerUrl, userId);
+		clearCache(userId);
+		return rows;
 	}
 }

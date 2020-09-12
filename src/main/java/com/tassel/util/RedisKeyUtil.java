@@ -32,6 +32,11 @@ public class RedisKeyUtil {
 	private static final String PREFIX_TICKET = "ticket";
 
 	/**
+	 * 对用户做缓存
+	 */
+	private static final String PREFIX_USER = "user";
+
+	/**
 	 * 某个实体的赞
 	 * like:entity:entityType:entityId -> set(userId)
 	 *
@@ -96,5 +101,15 @@ public class RedisKeyUtil {
 	 */
 	public static String getTicketKey(String ticket) {
 		return PREFIX_TICKET + SPLIT + ticket;
+	}
+
+	/**
+	 * 用户
+	 *
+	 * @param userId
+	 * @return
+	 */
+	public static String getUserKey(int userId) {
+		return PREFIX_USER + SPLIT + userId;
 	}
 }
