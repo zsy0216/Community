@@ -1,5 +1,8 @@
 package com.tassel.service;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author shuaiyin.zhang
  * @description
@@ -52,4 +55,25 @@ public interface FollowService {
 	 * @return
 	 */
 	boolean hasFollowed(int userId, int entityType, int entityId);
+
+	/**
+	 * 查询某用户关注的人
+	 *
+	 * @param userId
+	 * @param offset
+	 * @param limit
+	 * @return
+	 */
+	List<Map<String, Object>> findFolloweeList(int userId, int offset, int limit);
+
+	/**
+	 * 查询某用户的粉丝
+	 *
+	 * @param userId
+	 * @param offset
+	 * @param limit
+	 * @return
+	 */
+	List<Map<String, Object>> findFollowerList(int userId, int offset, int limit);
+
 }
