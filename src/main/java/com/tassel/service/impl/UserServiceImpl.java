@@ -8,9 +8,11 @@ import com.tassel.service.UserService;
 import com.tassel.util.CommunityConstant;
 import com.tassel.util.CommunityUtil;
 import com.tassel.util.MailClient;
+import com.tassel.util.RedisKeyUtil;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -34,12 +36,15 @@ public class UserServiceImpl implements UserService, CommunityConstant {
 	MailClient mailClient;
 	@Resource
 	TemplateEngine templateEngine;
-	@Resource
-	LoginTicketMapper loginTicketMapper;
+	//@Resource
+	//LoginTicketMapper loginTicketMapper;
 	@Value("${community.path.domain}")
 	private String domain;
 	@Value("${server.servlet.context-path}")
 	private String contextPath;
+
+	@Resource
+	RedisTemplate redisTemplate;
 
 	@Override
 	public User queryUserById(int id) {
@@ -160,7 +165,10 @@ public class UserServiceImpl implements UserService, CommunityConstant {
 		loginTicket.setStatus(0);
 		loginTicket.setTicket(CommunityUtil.generateUUID());
 		loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSecond * 1000));
-		loginTicketMapper.insertLoginTicket(loginTicket);
+		//loginTicketMapper.insertLoginTicket(loginTicket);
+
+		String redisKey = RedisKeyUtil.getTicketKey(loginTicket.getTicket());
+		redisTemplate.opsForValue().set(redisKey, loginTicket);
 
 		map.put("ticket", loginTicket.getTicket());
 		return map;
@@ -168,12 +176,18 @@ public class UserServiceImpl implements UserService, CommunityConstant {
 
 	@Override
 	public void logout(String ticket) {
-		loginTicketMapper.updateStatus(ticket, 1);
+		//loginTicketMapper.updateStatus(ticket, 1);
+		String redisKey = RedisKeyUtil.getTicketKey(ticket);
+		LoginTicket loginTicket = (LoginTicket) redisTemplate.opsForValue().get(redisKey);
+		loginTicket.setStatus(1);
+		redisTemplate.opsForValue().set(redisKey, loginTicket);
 	}
 
 	@Override
 	public LoginTicket findLoginTicket(String ticket) {
-		return loginTicketMapper.selectByTicket(ticket);
+		//return loginTicketMapper.selectByTicket(ticket);
+		String redisKey = RedisKeyUtil.getTicketKey(ticket);
+		return (LoginTicket) redisTemplate.opsForValue().get(redisKey);
 	}
 
 	@Override
