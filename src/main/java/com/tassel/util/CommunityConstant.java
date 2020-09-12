@@ -37,4 +37,9 @@ public interface CommunityConstant {
      * 评论实体类型：评论 对评论进行评论
      */
     int ENTITY_TYPE_COMMENT = 2;
+
+    /**
+     * 关注实体类型：用户 关注用户
+     */
+    int ENTITY_TYPE_USER = 3;
 }
