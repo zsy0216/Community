@@ -2,10 +2,13 @@ package com.tassel.config;
 
 import com.tassel.interceptor.LoginInterceptor;
 import com.tassel.interceptor.LoginRequiredInterceptor;
+import com.tassel.interceptor.MessageInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.annotation.Resource;
 
 /**
  * @Description
@@ -15,11 +18,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Autowired
+    @Resource
     LoginInterceptor loginInterceptor;
 
-    @Autowired
+    @Resource
     LoginRequiredInterceptor loginRequiredInterceptor;
+
+    @Resource
+    MessageInterceptor messageInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -27,6 +33,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/css/**", "/js/**", "/img/**");
 
         registry.addInterceptor(loginRequiredInterceptor)
+                .excludePathPatterns("/css/**", "/js/**", "/img/**");
+
+        registry.addInterceptor(messageInterceptor)
                 .excludePathPatterns("/css/**", "/js/**", "/img/**");
     }
 }
