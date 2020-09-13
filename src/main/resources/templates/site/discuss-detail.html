@@ -88,7 +88,7 @@
             发布于 <b th:text="${#dates.format(post.createTime, 'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</b>
             <ul class="d-inline float-right">
               <li class="d-inline ml-2">
-                <a href="javascript:;" th:onclick="|like(this, 1, ${post.id}, ${post.userId}), ${post.id};|" class="text-primary">
+                <a href="javascript:;" th:onclick="|like(this, 1, ${post.id}, ${post.userId}, ${post.id});|" class="text-primary">
                   <b th:text="${likeStatus == 1 ? '已赞' : '赞'}">赞</b> <i th:text="${likeCount}">11</i>
                 </a>
               </li>
