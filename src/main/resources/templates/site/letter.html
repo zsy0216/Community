@@ -69,11 +69,13 @@
         <ul class="nav nav-tabs mb-3">
           <li class="nav-item">
             <a class="nav-link position-relative active" th:href="@{/letter/list}">朋友私信
-              <span class="badge badge-danger" th:text="${letterUnreadCount}" th:if="${letterUnreadCount != 0}">3</span></a>
+              <span class="badge badge-danger" th:text="${letterUnreadCount}"
+                    th:if="${letterUnreadCount != 0}">3</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link position-relative" href="notice.html">系统通知
-              <span class="badge badge-danger">27</span></a>
+            <a class="nav-link position-relative" th:href="@{/notice/list}">系统通知
+              <span class="badge badge-danger" th:text="${noticeUnreadCount}"
+                    th:if="${letterUnreadCount != 0}">27</span></a>
           </li>
         </ul>
         <button type="button" class="btn btn-primary btn-sm position-absolute rt-0" data-toggle="modal"
@@ -135,12 +137,15 @@
           <div class="media-body">
             <h6 class="mt-0 mb-3">
               <span class="text-success" th:utext="${map.target.username}">落基山脉下的闲人</span>
-              <span class="float-right text-muted font-size-12" th:text="${#dates.format(map.conversation.createTime, 'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
+              <span class="float-right text-muted font-size-12"
+                    th:text="${#dates.format(map.conversation.createTime, 'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
             </h6>
             <div>
-              <a th:href="@{|/letter/detail/${map.conversation.conversationId}|}" th:utext="${map.conversation.content}">米粉车, 你来吧!</a>
+              <a th:href="@{|/letter/detail/${map.conversation.conversationId}|}"
+                 th:utext="${map.conversation.content}">米粉车, 你来吧!</a>
               <ul class="d-inline font-size-12 float-right">
-                <li class="d-inline ml-2"><a href="#" class="text-primary">共 <i th:text="${map.letterCount}">5</i> 条会话</a></li>
+                <li class="d-inline ml-2"><a href="#" class="text-primary">共 <i th:text="${map.letterCount}">5</i>
+                  条会话</a></li>
               </ul>
             </div>
           </div>
