@@ -93,7 +93,7 @@
                     th:text="${#dates.format(commentNotice.message.createTime, 'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
             </h6>
             <div>
-              <a href="#">
+              <a th:href="@{/notice/detail/comment}">
                 用户 <i th:utext="${commentNotice.user.username}">nowcoder</i>
                 评论了你的<b th:text="${commentNotice.entityType == 1 ? '帖子' : '回复'}">帖子</b> ...</a>
               <ul class="d-inline font-size-12 float-right">
@@ -114,7 +114,7 @@
                     th:text="${#dates.format(likeNotice.message.createTime, 'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
             </h6>
             <div>
-              <a href="#">
+              <a th:href="@{/notice/detail/like}">
                 用户 <i th:utext="${likeNotice.user.username}">nowcoder</i>
                 点赞了你的<b th:text="${likeNotice.entityType==1?'帖子':'回复'}">帖子</b> ...</a>
               <ul class="d-inline font-size-12 float-right">
@@ -135,8 +135,9 @@
                     th:text="${#dates.format(followNotice.message.createTime, 'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
             </h6>
             <div>
-              <a href="#">
-                用户 <i th:utext="${followNotice.user.username}">nowcoder</i>
+              <a th:href="@{/notice/detail/follow}">
+                用户 <!--/*@thymesVar id="user" type=""*/-->
+                <i th:utext="${followNotice.user.username}">nowcoder</i>
                 关注了你 ...</a>
               <ul class="d-inline font-size-12 float-right">
                 <li class="d-inline ml-2"><span class="text-primary">共 <i

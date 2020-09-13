@@ -100,6 +100,17 @@
             and conversation_id = #{topic}
         </if>
     </select>
+    <select id="selectNotices" resultType="com.tassel.entity.Message">
+        select
+        <include refid="selectFields"/>
+        from community.message
+        where status != 2
+        and from_id = 1
+        and to_id = #{userId}
+        and conversation_id = #{topic}
+        order by create_time desc
+        limit #{offset}, #{limit}
+    </select>
 
     <insert id="insertMessage" parameterType="com.tassel.entity.Message" keyProperty="id">
         insert into community.message(<include refid="insertFields"/>)
