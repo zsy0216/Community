@@ -1,6 +1,7 @@
 package com.tassel.controller;
 
 import com.tassel.entity.User;
+import com.tassel.event.EventProducer;
 import com.tassel.service.FollowService;
 import com.tassel.service.UserService;
 import com.tassel.util.CommunityConstant;
@@ -34,6 +35,9 @@ public class FollowController implements CommunityConstant {
 
 	@Resource
 	UserService userService;
+
+	@Resource
+	EventProducer eventProducer;
 
 	@PostMapping("/follow")
 	@ResponseBody

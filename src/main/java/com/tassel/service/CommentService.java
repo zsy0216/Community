@@ -1,6 +1,7 @@
 package com.tassel.service;
 
 import com.tassel.entity.Comment;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -38,4 +39,12 @@ public interface CommentService {
 	 * @return
 	 */
 	Integer insertComment(Comment comment);
+
+	/**
+	 * 查询帖子根据 id
+	 *
+	 * @param id
+	 * @return
+	 */
+	Comment selectCommentById(int id);
 }

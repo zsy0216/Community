@@ -1,7 +1,9 @@
 package com.tassel.controller;
 
 import com.tassel.entity.User;
+import com.tassel.event.EventProducer;
 import com.tassel.service.LikeService;
+import com.tassel.util.CommunityConstant;
 import com.tassel.util.CommunityUtil;
 import com.tassel.util.HostHolder;
 import org.springframework.stereotype.Controller;
@@ -18,13 +20,16 @@ import java.util.Map;
  * @date 2020/09/11
  */
 @Controller
-public class LikeController {
+public class LikeController implements CommunityConstant {
 
 	@Resource
 	LikeService likeService;
 
 	@Resource
 	HostHolder hostHolder;
+
+	@Resource
+	EventProducer eventProducer;
 
 	@PostMapping("/like")
 	@ResponseBody

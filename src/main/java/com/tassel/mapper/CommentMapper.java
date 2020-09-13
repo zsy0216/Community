@@ -2,6 +2,7 @@ package com.tassel.mapper;
 
 import com.tassel.entity.Comment;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -40,4 +41,13 @@ public interface CommentMapper {
 	 * @return
 	 */
 	Integer insertComment(Comment comment);
+
+	/**
+	 * 查询帖子根据 id
+	 *
+	 * @param id
+	 * @return
+	 */
+	@Select("select `id`, `user_id`, `entity_type`, `entity_id`, `target_id`, `content`, `status`, `create_time` from community.comment where `id` = #{id}")
+	Comment selectCommentById(int id);
 }
