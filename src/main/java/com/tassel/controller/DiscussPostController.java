@@ -2,7 +2,9 @@ package com.tassel.controller;
 
 import com.tassel.entity.Comment;
 import com.tassel.entity.DiscussPost;
+import com.tassel.entity.Event;
 import com.tassel.entity.User;
+import com.tassel.event.EventProducer;
 import com.tassel.service.CommentService;
 import com.tassel.service.DiscussPostService;
 import com.tassel.service.LikeService;
@@ -42,6 +44,9 @@ public class DiscussPostController implements CommunityConstant {
 	@Resource
 	LikeService likeService;
 
+	@Resource
+	EventProducer eventProducer;
+
 	@PostMapping("/insert")
 	@ResponseBody
 	public String insertDiscussPost(String title, String content) {
@@ -60,6 +65,14 @@ public class DiscussPostController implements CommunityConstant {
 		post.setCommentCount(0);
 		post.setScore(0.0);
 		discussPostService.insertDiscussPost(post);
+
+		// 触发发帖事件
+		Event event = new Event()
+				.setTopic(TOPIC_PUBLISH)
+				.setUserId(user.getId())
+				.setEntityType(ENTITY_TYPE_POST)
+				.setEntityId(post.getId());
+		eventProducer.fireEvent(event);
 
 		// 报错异常情况，后续统一处理
 		return CommunityUtil.getJSONString(0, "帖子发布成功!");
