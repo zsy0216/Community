@@ -46,6 +46,7 @@ spring:
       cluster-name: nowcoder
       cluster-nodes: 127.0.0.1:9300
 
+
 # 加密参数
 jasypt:
   encryptor:
