@@ -39,7 +39,7 @@
         where id = #{id}
     </select>
 
-    <insert id="insertDiscussPost" parameterType="com.tassel.entity.DiscussPost">
+    <insert id="insertDiscussPost" parameterType="com.tassel.entity.DiscussPost" keyProperty="id">
         insert into discuss_post(<include refid="insertFields"/>)
         values (#{userId}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})
     </insert>
