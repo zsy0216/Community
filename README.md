@@ -1,6 +1,8 @@
 # 牛客Java高级工程师 - 高薪求职项目课vol.4
 ---
 
+欢迎与我交流QQ:594983498
+
 ![image-20200917164615000](https://gitee.com/zsy0216/typora-image/raw/master/typora/image-20200917164615000.png)
 
 以下为个人知识点补充，不代表课程内容
