@@ -40,6 +40,7 @@ public class MailClient {
             helper.setSubject(subject);
             helper.setText(content, true);
             mailSender.send(helper.getMimeMessage());
+            logger.info("邮件发送成功，需要查看请配置自己的邮箱信息，或与我联系：qq 594983498");
         } catch (MessagingException e) {
             logger.error("发送邮件失败:" + e.getMessage());
         }

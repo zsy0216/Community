@@ -75,6 +75,7 @@ public class LoginController implements CommunityConstant {
 		if (map == null || map.isEmpty()) {
 			model.addAttribute("msg", "注册成功，已经向您的邮箱发送了一封激活邮件，请尽快激活!");
 			model.addAttribute("target", "/index");
+			logger.info("邮件发送成功，需要查看请配置自己的邮箱信息，或与我联系：qq 594983498");
 			return "/site/operate-result";
 		} else {
 			model.addAttribute("usernameMsg", map.get("usernameMsg"));
@@ -100,14 +101,17 @@ public class LoginController implements CommunityConstant {
 			case ACTIVATION_SUCCESS:
 				model.addAttribute("msg", "激活成功,您的账号已经可以正常使用了!");
 				model.addAttribute("target", "/login");
+				logger.info("如需自己手动操作请配置自己的邮箱信息，或与我联系：qq 594983498");
 				break;
 			case ACTIVATION_REPEAT:
 				model.addAttribute("msg", "重复操作,您的账号已经激活过了!");
 				model.addAttribute("target", "/index");
+				logger.info("如需自己手动操作请配置自己的邮箱信息，或与我联系：qq 594983498");
 				break;
 			default:
 				model.addAttribute("msg", "激活失败,请检查您的激活码是否正确!");
 				model.addAttribute("target", "/index");
+				logger.info("如需自己手动操作请配置自己的邮箱信息，或与我联系：qq 594983498");
 				break;
 		}
 		return "/site/operate-result";
